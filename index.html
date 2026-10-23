@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Kenny's EECS 367 Project 3 portfolio: forward kinematics and an eight-state robot choreography.">
+  <title>EECS 367 Project 3 | Kenny</title>
+  <link rel="icon" href="assets/beacon-mark.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<main>
+  <header>
+    <h1>Project 3: Forward Kinematics</h1>
+    <p>Kenny · EECS 367 · Fall 2026</p>
+  </header>
+
+  <section aria-labelledby="demo-title">
+    <h2 id="demo-title">Demonstration</h2>
+    <video controls playsinline preload="metadata" poster="assets/beacon-poster.jpg">
+      <source src="assets/beacon-choreography.mp4" type="video/mp4">
+      <a href="assets/beacon-choreography.mp4">Download the video</a>.
+    </video>
+    <p class="caption">Recorded October 22, 2026 · 17.5 seconds · 1280 × 720 · no audio</p>
+    <p>The video shows Beacon completing one FSM choreography while the viewer receives world transforms from the project's C++ forward-kinematics runtime. The final frame shows all eight states completed.</p>
+  </section>
+
+  <section aria-labelledby="robot-title">
+    <h2 id="robot-title">Robot</h2>
+    <p>Beacon is a custom URDF robot with eight links: a turning base, an articulated arm, a rotating wrist, two sliding gripper fingers, and a fixed tool-tip link. It has four rotary joints, two prismatic joints, and one fixed joint. The visuals are boxes; the orange marker identifies the tool tip.</p>
+    <p>This is a kinematic demonstration. The grasp state closes the fingers in free space; there is no object contact, collision simulation, or force control.</p>
+  </section>
+
+  <section aria-labelledby="choreography-title">
+    <h2 id="choreography-title">Choreography</h2>
+    <ol>
+      <li>Home: begin with the gripper open.</li>
+      <li>Reach: turn the base and extend the arm.</li>
+      <li>Grasp: close both fingers.</li>
+      <li>Lift: raise the arm.</li>
+      <li>Greet left: turn left and rotate the wrist.</li>
+      <li>Greet right: reverse the greeting.</li>
+      <li>Release: open the fingers and reset the pose.</li>
+      <li>Return home: hold the final pose and stop.</li>
+    </ol>
+    <p>Each state publishes a joint-space target. The servo moves toward that target and reports joint positions on <code>/joint_states</code>. The FSM advances after all rotary-joint errors are within 0.018 rad and sliding-joint errors are within 1.5 mm, followed by a 0.7-second hold.</p>
+  </section>
+
+  <section aria-labelledby="rendering-title">
+    <h2 id="rendering-title">Rendering</h2>
+    <p>The runtime calculates parent-to-child transforms on <code>/tf</code> and composes them into column-major 4 × 4 matrices on <code>/xform_world</code>. A local bridge forwards those matrices to the browser without recalculating forward kinematics.</p>
+    <p>The Canvas 2D viewer transforms each box's vertices using the received link matrix and its visual offset, projects them into a fixed 3D view, and draws faces in depth order. The orange trail records successive tool-tip positions. The video is a capture of that live canvas, not a separate animation.</p>
+  </section>
+
+  <section aria-labelledby="notes-title">
+    <h2 id="notes-title">Notes</h2>
+    <p>The portfolio additions are separate from the previously submitted C++ FK implementation. No Fetch model or mesh is used.</p>
+    <p><a href="assets/beacon-choreography.mp4" download>Download video</a> · <a href="https://autorob.org/projects/project3/#portfolio-deliverable">Project requirements</a></p>
+  </section>
+
+  <footer>
+    <p>OpenAI Codex assisted with the Beacon URDF, choreography, Python servo/FSM, viewer, and portfolio page.</p>
+  </footer>
+</main>
+</body>
+</html>
